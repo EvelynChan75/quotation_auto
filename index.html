@@ -41,7 +41,6 @@
                 resize: none !important;
                 padding: 0 !important;
             }
-            /* 隱藏原生 input number 的箭頭 */
             input[type=number]::-webkit-inner-spin-button,
             input[type=number]::-webkit-outer-spin-button {
                 -webkit-appearance: none;
@@ -52,7 +51,6 @@
             }
         }
 
-        /* 隱藏數字輸入框的上下箭頭 */
         .no-spinner::-webkit-inner-spin-button,
         .no-spinner::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -86,7 +84,7 @@
         </div>
     </div>
 
-    <!-- 報價單主體容器 (A4 比例與精簡間距) -->
+    <!-- 報價單主體容器 -->
     <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-xl border border-gray-200 print-container relative">
         
         <!-- 頂部區塊：Logo & 賣方資訊 / 報價單標題 -->
@@ -94,10 +92,8 @@
             
             <!-- 左側：公司標誌與賣方資料 -->
             <div class="w-full md:w-2/3 space-y-2">
-                <!-- 公司 Logo 上傳/顯示區 -->
                 <div class="relative group h-12 flex items-center border-2 border-dashed border-transparent hover:border-cyan-500 rounded-lg transition cursor-pointer overflow-hidden" onclick="document.getElementById('logoInput').click()">
                     <div id="logoPreview" class="h-full flex items-center">
-                        <!-- 寬聯資訊 官方 Logo -->
                         <svg class="h-10 w-auto" viewBox="0 0 250 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g transform="translate(5, 10) scale(0.95)">
                                 <polygon points="12,35 20,20 35,20 43,35 35,50 20,50" stroke="#88c437" stroke-width="3" fill="none"/>
@@ -115,7 +111,6 @@
                     <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'logoPreview')">
                 </div>
 
-                <!-- 賣方公司詳細資料 -->
                 <div class="space-y-0.5 text-xs">
                     <input type="text" id="sellerName" class="font-bold text-gray-800 text-base w-full focus:outline-none focus:bg-gray-50 rounded px-1" value="寬聯資訊股份有限公司" placeholder="公司名稱">
                     
@@ -148,7 +143,6 @@
                     <p class="text-[10px] text-gray-400 tracking-widest uppercase">Quotation</p>
                 </div>
 
-                <!-- 報價日期 -->
                 <div class="inline-block bg-gray-50 p-2 rounded-lg border border-gray-100 w-full md:w-auto text-left">
                     <div class="flex items-center justify-between md:justify-end gap-2 text-xs">
                         <span class="text-gray-500 font-medium">報價日期：</span>
@@ -162,13 +156,11 @@
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 mb-4">
             <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">買方 / 客戶資料 (CLIENT INFORMATION)</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-1.5 gap-x-6">
-                <!-- Row 1: 公司名稱 -->
                 <div class="flex items-center">
                     <input type="text" id="clientName" class="font-bold text-gray-800 text-sm w-full bg-transparent focus:outline-none focus:bg-white rounded px-1.5 py-0.5 border border-transparent focus:border-gray-300" placeholder="客戶 / 公司名稱" value="台新國際商業銀行股份有限公司">
                 </div>
                 <div class="hidden md:block"></div>
 
-                <!-- Row 2: 統一編號與電話 -->
                 <div class="flex items-center text-xs text-gray-600">
                     <span class="text-gray-400 w-16 shrink-0 whitespace-nowrap">統一編號：</span>
                     <input type="text" id="clientTaxId" class="w-full bg-transparent focus:outline-none focus:bg-white rounded px-1 py-0.5 border border-transparent focus:border-gray-300" placeholder="買方統編" value="86519539">
@@ -178,7 +170,6 @@
                     <input type="text" id="clientPhone" class="w-full bg-transparent focus:outline-none focus:bg-white rounded px-1 py-0.5 border border-transparent focus:border-gray-300" placeholder="聯絡電話" value="02-8798-9999#8538">
                 </div>
 
-                <!-- Row 3: 聯絡人與 Email -->
                 <div class="flex items-center text-xs text-gray-600">
                     <span class="text-gray-400 w-16 shrink-0 whitespace-nowrap">聯絡人：</span>
                     <input type="text" id="clientContact" class="w-full bg-transparent focus:outline-none focus:bg-white rounded px-1 py-0.5 border border-transparent focus:border-gray-300" placeholder="聯絡人姓名/職稱" value="陳永峰 經理">
@@ -190,10 +181,8 @@
             </div>
         </div>
 
-        <!-- 服務報價表格 (月份改為單位、高度自適應) -->
+        <!-- 服務報價表格 -->
         <div class="border border-gray-300 rounded-lg overflow-hidden mb-4 shadow-sm">
-            
-            <!-- 表頭專案資訊 (專案名稱 & 服務期間) -->
             <div class="bg-gray-100 border-b border-gray-300 text-xs">
                 <div class="flex flex-col sm:flex-row border-b border-gray-200">
                     <div class="w-full sm:w-24 bg-gray-200 text-gray-700 font-bold p-2 text-center border-r border-gray-300 shrink-0 whitespace-nowrap">專案名稱</div>
@@ -224,7 +213,6 @@
                         </tr>
                     </thead>
                     <tbody id="itemsTableBody" class="divide-y divide-gray-200 text-xs">
-                        <!-- 動態由 JavaScript 產生 -->
                     </tbody>
                 </table>
             </div>
@@ -240,7 +228,7 @@
         <!-- 結算總計與簽署蓋章區 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-gray-200 pt-4">
             
-            <!-- 左側：備註條款 與 大尺寸客戶簽署區 -->
+            <!-- 左側：備註條款 與 客戶簽署區 -->
             <div class="space-y-4">
                 <div>
                     <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">備註</h4>
@@ -250,13 +238,11 @@
 4. 本報價單未經本公司書面同意，不得對外公開本報價單之存在或內容</textarea>
                 </div>
 
-                <!-- 客戶簽署 / 蓋章回傳區 -->
                 <div class="border border-gray-200 rounded-lg p-3.5 bg-slate-50/50 space-y-3">
                     <div class="flex justify-between items-center text-xs font-bold text-gray-700">
                         <span>客戶簽署 / 蓋章回傳區：</span>
                         <span class="text-[10px] text-gray-400 font-normal">(請蓋章後掃描或傳真回覆)</span>
                     </div>
-                    <!-- 大尺寸蓋章簽名視窗 -->
                     <div class="min-h-[140px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-white p-2">
                         <span class="text-xs text-gray-300 font-medium">客戶確認簽章處</span>
                     </div>
@@ -269,7 +255,6 @@
             <!-- 右側：金額計算與公司蓋章 -->
             <div class="space-y-4">
                 <div class="space-y-2.5 text-xs bg-gray-50/80 p-3.5 rounded-xl border border-gray-100">
-                    <!-- 切換計算方式：自動計算 / 一口價手動輸入 -->
                     <div class="flex justify-between items-center text-gray-500 pb-1.5 border-b border-gray-200 no-print">
                         <span class="text-[11px]">總額計費模式：</span>
                         <select id="calcMode" onchange="toggleCalcMode()" class="text-xs bg-white border border-gray-300 rounded px-1.5 py-0.5 focus:outline-none">
@@ -278,7 +263,6 @@
                         </select>
                     </div>
 
-                    <!-- 小計 -->
                     <div class="flex justify-between items-center text-gray-600">
                         <span>小計 (Subtotal)</span>
                         <div class="flex items-center gap-1 font-medium">
@@ -291,7 +275,6 @@
                         </div>
                     </div>
 
-                    <!-- 營業稅 (預設 5%) -->
                     <div class="flex justify-between items-center text-gray-600">
                         <div class="flex items-center gap-1">
                             <span>營業稅</span>
@@ -303,23 +286,19 @@
                         <span id="taxDisplay" class="font-medium">NT$ 0</span>
                     </div>
 
-                    <!-- 總計 -->
                     <div class="border-t border-gray-200 pt-2 mt-1 flex justify-between items-center">
                         <span class="text-sm font-bold text-gray-900">總計 (Total)</span>
                         <span id="grandTotalDisplay" class="text-lg font-extrabold text-cyan-900">NT$ 0</span>
                     </div>
                 </div>
 
-                <!-- 公司蓋章 / 簽署區 (右下角) -->
                 <div class="pt-2 border-t border-dashed border-gray-200">
                     <div class="flex justify-between items-end">
                         <div class="text-xs text-gray-400">
                             公司蓋章 / 負責人簽署：
                         </div>
-                        <!-- 印章圖片上傳/預覽 -->
                         <div class="relative group w-36 h-24 border-2 border-dashed border-transparent hover:border-cyan-500 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden" onclick="document.getElementById('stampInput').click()">
                             <div id="stampPreview" class="w-full h-full flex items-center justify-center p-1">
-                                <!-- 藍色雙圈橢圓公司報價專用章 -->
                                 <svg class="w-32 h-20" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
                                     <ellipse cx="100" cy="65" rx="95" ry="60" fill="none" stroke="#255fa3" stroke-width="3" opacity="0.85"/>
                                     <ellipse cx="100" cy="65" rx="89" ry="54" fill="none" stroke="#255fa3" stroke-width="1.5" opacity="0.85"/>
@@ -355,7 +334,6 @@
             </div>
         </div>
 
-        <!-- 頁尾宣告 -->
         <div class="mt-8 text-center text-[11px] text-gray-400 border-t border-gray-100 pt-3">
             感謝您的惠顧！如有任何問題，歡迎隨時與我們聯繫。
         </div>
@@ -363,12 +341,8 @@
 
     <!-- JavaScript 邏輯控制 -->
     <script>
-        // 初始化日期為今日
-        document.getElementById('quoteDate').valueAsDate = new Date();
+        let currentSubtotalNum = 0;
 
-        let currentSubtotalNum = 0; // 儲存純數字小計
-
-        // 預設報價項目
         let items = [
             { 
                 itemNo: '1',
@@ -388,9 +362,7 @@
             },
             { 
                 itemNo: '3',
-                description: `1、維護等級SLA：甲方營業時間 5x8
-2、付款方式：每季季末實施軟體維護作業，隔月月初開立發票請款
-3、服務標的：智能表單處理系統`, 
+                description: '1、維護等級SLA：甲方營業時間 5x8\n2、付款方式：每季季末實施軟體維護作業，隔月月初開立發票請款\n3、服務標的：智能表單處理系統', 
                 people: '', 
                 unit: '', 
                 price: '',
@@ -398,30 +370,28 @@
             }
         ];
 
-        // 高度自動適應 textarea
         function autoResizeTextarea(element) {
+            if (!element) return;
             element.style.height = 'auto';
-            element.style.height = element.scrollHeight + 'px';
+            element.style.height = (element.scrollHeight) + 'px';
         }
 
-        // 數字轉千分位字串 (0 則回傳空字串)
         function formatNumber(num) {
             if (num === '' || num === null || num === undefined || isNaN(num)) return '';
-            const rounded = Math.round(num);
+            const rounded = Math.round(Number(num));
             if (rounded === 0) return '';
             return rounded.toLocaleString('en-US');
         }
 
-        // 解析千分位字串為純數字
         function parseFormattedNumber(val) {
             if (!val) return 0;
             const cleanStr = String(val).replace(/,/g, '');
             return parseFloat(cleanStr) || 0;
         }
 
-        // 渲染品項表格
         function renderItems() {
             const tbody = document.getElementById('itemsTableBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             items.forEach((item, index) => {
@@ -436,13 +406,13 @@
                         <input type="text" value="${escapeHtml(item.itemNo || (index + 1).toString())}" onchange="updateItem(${index}, 'itemNo', this.value)" class="w-full text-center bg-transparent focus:outline-none focus:bg-white rounded px-0.5 py-0.5 border border-transparent focus:border-gray-300 font-medium text-gray-600">
                     </td>
                     <td class="py-1.5 px-3 border-r border-gray-200">
-                        <textarea oninput="autoResizeTextarea(this); updateItem(${index}, 'description', this.value)" class="w-full bg-transparent focus:outline-none focus:bg-white rounded px-1 py-0.5 border border-transparent focus:border-gray-300 resize-none overflow-hidden text-xs leading-relaxed" rows="1" placeholder="請輸入項目名稱或需求說明">${escapeHtml(item.description)}</textarea>
+                        <textarea oninput="autoResizeTextarea(this); updateItem(${index}, 'description', this.value)" class="w-full bg-transparent focus:outline-none focus:bg-white rounded px-1 py-0.5 border border-transparent focus:border-gray-300 resize-none overflow-hidden text-xs leading-relaxed" rows="1" placeholder="請輸入項目名稱或需求說明">${escapeHtml(item.description || '')}</textarea>
                     </td>
                     <td class="py-1.5 px-1 text-center border-r border-gray-200 pt-2.5">
                         <input type="number" min="0" value="${item.people !== undefined && item.people !== null ? item.people : ''}" onchange="updateItemCalc(${index}, 'people', this.value)" class="w-full text-center bg-transparent focus:outline-none focus:bg-white rounded px-0.5 py-0.5 border border-transparent focus:border-gray-300 no-spinner font-medium">
                     </td>
                     <td class="py-1.5 px-1 text-center border-r border-gray-200 pt-2.5">
-                        <input type="text" value="${escapeHtml(item.unit || '')}" onchange="updateItem(${index}, 'unit', this.value)" class="w-full text-center bg-transparent focus:outline-none focus:bg-white rounded px-0.5 py-0.5 border border-transparent focus:border-gray-300 font-medium text-gray-700" placeholder="">
+                        <input type="text" value="${escapeHtml(item.unit || '')}" onchange="updateItemCalc(${index}, 'unit', this.value)" class="w-full text-center bg-transparent focus:outline-none focus:bg-white rounded px-0.5 py-0.5 border border-transparent focus:border-gray-300 font-medium text-gray-700" placeholder="">
                     </td>
                     <td class="py-1.5 px-2 text-right border-r border-gray-200 pt-2.5">
                         <input type="text" value="${formattedPrice}" 
@@ -467,15 +437,15 @@
                 `;
                 tbody.appendChild(tr);
 
-                // 初始化輸入框高度
-                const textarea = tr.querySelector('textarea');
-                autoResizeTextarea(textarea);
+                setTimeout(() => {
+                    const textarea = tr.querySelector('textarea');
+                    autoResizeTextarea(textarea);
+                }, 0);
             });
 
             calculateTotals();
         }
 
-        // 新增報價項目
         function addItem() {
             items.push({ 
                 itemNo: (items.length + 1).toString(),
@@ -488,18 +458,15 @@
             renderItems();
         }
 
-        // 刪除品項
         function removeItem(index) {
             items.splice(index, 1);
             renderItems();
         }
 
-        // 一般欄位更新
         function updateItem(index, field, value) {
             items[index][field] = value;
         }
 
-        // 修改單價 (自動千分位)
         function updateItemPrice(index, value) {
             const num = parseFormattedNumber(value);
             items[index].price = num || '';
@@ -507,13 +474,16 @@
             renderItems();
         }
 
-        // 當輸入人數與單價時自動計算金額，單位若為純數字也可參與相乘計算
         function updateItemCalc(index, field, value) {
-            items[index][field] = value === '' ? '' : (field === 'people' || field === 'price' ? (parseFloat(value) || 0) : value);
+            if (field === 'people' || field === 'price') {
+                items[index][field] = value === '' ? '' : (parseFloat(value) || 0);
+            } else {
+                items[index][field] = value;
+            }
             
             const p = parseFloat(items[index].people) || 0;
             const pr = parseFloat(items[index].price) || 0;
-            const uNum = parseFloat(items[index].unit); // 若單位填數字，如 12 個月
+            const uNum = parseFloat(items[index].unit);
 
             let multiplier = 1;
             if (!isNaN(uNum) && uNum > 0) {
@@ -532,7 +502,6 @@
             calculateTotals();
         }
 
-        // 手動直接更改金額 (自動帶入千分位)
         function updateItemAmount(index, value) {
             const num = parseFormattedNumber(value);
             items[index].customAmount = num;
@@ -541,7 +510,6 @@
             calculateTotals();
         }
 
-        // 切換一口價 / 自動計算模式
         function toggleCalcMode() {
             const mode = document.getElementById('calcMode').value;
             const subtotalInput = document.getElementById('subtotalInput');
@@ -555,15 +523,15 @@
             calculateTotals();
         }
 
-        // 手動修改一口價
         function manualSubtotalChange(val) {
             currentSubtotalNum = parseFormattedNumber(val);
             calculateTotals();
         }
 
-        // 計算總金額 (確保全部帶千分位格式)
         function calculateTotals() {
-            const mode = document.getElementById('calcMode').value;
+            const modeEl = document.getElementById('calcMode');
+            if (!modeEl) return;
+            const mode = modeEl.value;
             let subtotal = 0;
 
             if (mode === 'auto') {
@@ -576,17 +544,20 @@
                 subtotal = currentSubtotalNum;
             }
 
-            document.getElementById('subtotalInput').value = formatNumber(subtotal);
+            const subtotalInput = document.getElementById('subtotalInput');
+            if (subtotalInput) subtotalInput.value = formatNumber(subtotal);
 
             const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
             const tax = Math.round(subtotal * taxRate);
             const grandTotal = Math.round(subtotal + tax);
 
-            document.getElementById('taxDisplay').textContent = `NT$ ${formatNumber(tax)}`;
-            document.getElementById('grandTotalDisplay').textContent = `NT$ ${formatNumber(grandTotal)}`;
+            const taxDisplay = document.getElementById('taxDisplay');
+            if (taxDisplay) taxDisplay.textContent = `NT$ ${formatNumber(tax)}`;
+            
+            const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+            if (grandTotalDisplay) grandTotalDisplay.textContent = `NT$ ${formatNumber(grandTotal)}`;
         }
 
-        // 圖片上傳處置 (Logo / 印章)
         function handleImageUpload(event, previewId) {
             const file = event.target.files[0];
             if (file) {
@@ -599,8 +570,8 @@
             }
         }
 
-        // 特殊字元轉義保護
         function escapeHtml(text) {
+            if (!text) return '';
             return String(text)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
@@ -609,7 +580,6 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // 載入預設資料
         function loadSampleData() {
             document.getElementById('sellerName').value = '寬聯資訊股份有限公司';
             document.getElementById('sellerTaxId').value = '52784735';
@@ -651,9 +621,7 @@
                 },
                 { 
                     itemNo: '3',
-                    description: `1、維護等級SLA：甲方營業時間 5x8
-2、付款方式：每季季末實施軟體維護作業，隔月月初開立發票請款
-3、服務標的：智能表單處理系統`, 
+                    description: '1、維護等級SLA：甲方營業時間 5x8\n2、付款方式：每季季末實施軟體維護作業，隔月月初開立發票請款\n3、服務標的：智能表單處理系統', 
                     people: '', 
                     unit: '', 
                     price: '',
@@ -663,7 +631,6 @@
             renderItems();
         }
 
-        // 清空欄位
         function clearData() {
             document.getElementById('projectName').value = '';
             document.getElementById('servicePeriod').value = '';
@@ -677,7 +644,11 @@
         }
 
         // 頁面初始化
-        renderItems();
+        window.onload = function() {
+            const quoteDateEl = document.getElementById('quoteDate');
+            if (quoteDateEl) quoteDateEl.valueAsDate = new Date();
+            renderItems();
+        };
     </script>
 </body>
 </html>
