@@ -11,7 +11,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     
-    <!-- 方案一：純前端 .msg 郵件解析套件 (完全無伺服器成本) -->
+    <!-- 方案一：純前端 .msg 與 .eml 郵件解析套件 (完全無伺服器成本) -->
     <script src="https://cdn.jsdelivr.net/npm/@kenjiuno/msgreader@1.28.0/lib/MsgReader.js"></script>
 
     <style>
@@ -97,12 +97,12 @@
                 <span class="text-[11px] text-gray-500">自動識別：客戶資料(含分機)、專案名稱、服務期間與純需求規格</span>
             </div>
 
-            <!-- 拖曳/選擇 .msg 檔案區域 (方案一純前端解析) -->
+            <!-- 拖曳/選擇 .msg 或 .eml 檔案區域 -->
             <div id="dropZone" class="border-2 border-dashed border-cyan-300 bg-white p-3 rounded-lg text-center cursor-pointer hover:bg-cyan-50/80 transition duration-150">
                 <i class="fa-solid fa-file-arrow-up text-cyan-600 text-xl mb-1"></i>
-                <p class="text-xs text-gray-700 font-bold">點擊選擇，或將 Outlook .msg 郵件檔拖曳至此處</p>
+                <p class="text-xs text-gray-700 font-bold">點擊選擇，或將 .msg / .eml 郵件檔拖曳至此處</p>
                 <p class="text-[10px] text-gray-400">系統會在瀏覽器本機自動解碼並分析（不用傳到伺服器，安全零成本）</p>
-                <input type="file" id="msgFileInput" accept=".msg" class="hidden" onchange="handleMsgFileUpload(event)">
+                <input type="file" id="msgFileInput" accept=".msg,.eml,.txt" class="hidden" onchange="handleMsgFileUpload(event)">
             </div>
 
             <!-- 手動貼上純文字區塊 -->
@@ -395,14 +395,13 @@
             panel.classList.toggle('hidden');
         }
 
-        // 高度自動適應 textarea 函數
         function autoResizeTextarea(element) {
             if (!element) return;
             element.style.height = 'auto';
             element.style.height = element.scrollHeight + 'px';
         }
 
-        // --- 方案一：初始化拖曳與選擇 .msg 檔案監聽事件 ---
+        // 初始化拖曳與選擇檔案監聽事件
         window.addEventListener('DOMContentLoaded', () => {
             const dropZone = document.getElementById('dropZone');
             if (dropZone) {
@@ -428,7 +427,6 @@
             }
         });
 
-        // 選擇 .msg 檔案觸發
         function handleMsgFileUpload(event) {
             const file = event.target.files[0];
             if (file) {
@@ -436,44 +434,61 @@
             }
         }
 
-        // 純前端解析 .msg 檔案 (MsgReader 套件)
+        // 升級版：同時相容 OLE2 .msg 格式與 MIME 純文字 (.eml / .txt) 格式
         function processMsgFile(file) {
-            if (!file.name.toLowerCase().endsWith('.msg')) {
-                alert('請選擇副檔名為 .msg 的 Outlook 郵件檔案！');
-                return;
-            }
-
             const reader = new FileReader();
+
+            // 1. 嘗試以二進位 (ArrayBuffer) 解析標準 .msg 檔
             reader.onload = function(e) {
+                const buffer = e.target.result;
+                let extractedText = '';
+
                 try {
-                    const buffer = e.target.result;
-                    // 使用 MsgReader 讀取 ArrayBuffer
                     const msgReader = new MsgReader(buffer);
                     const fileData = msgReader.getFileData();
 
                     if (fileData) {
-                        // 提取純文字內文，若無純文字則過濾 HTML 標籤
-                        let bodyText = fileData.body || '';
-                        if (!bodyText && fileData.htmlBody) {
-                            bodyText = fileData.htmlBody.replace(/<[^>]+>/g, '');
-                        }
-
-                        if (bodyText) {
-                            document.getElementById('emailRawText').value = bodyText;
-                            parseEmailContent(); // 直接觸發自動帶入
-                        } else {
-                            alert('成功讀取 .msg 檔案，但未找到可用的本文文字。');
+                        extractedText = fileData.body || '';
+                        if (!extractedText && fileData.htmlBody) {
+                            extractedText = fileData.htmlBody.replace(/<[^>]+>/g, '');
                         }
                     }
                 } catch (err) {
-                    console.error('MSG Parse Error:', err);
-                    alert('解析 .msg 檔案失敗，請確認該檔案是否為標準 Outlook 郵件格式。');
+                    console.log('非標準 OLE2 .msg 檔，嘗試切換為純文字 / MIME 文字解析...');
+                }
+
+                // 2. 若 MsgReader 無法解析 (非 OLE2 結構)，則使用 TextReader 讀取 MIME 內文
+                if (extractedText) {
+                    document.getElementById('emailRawText').value = extractedText;
+                    parseEmailContent();
+                } else {
+                    readAsTextFile(file);
                 }
             };
+
             reader.readAsArrayBuffer(file);
         }
 
-        // 智慧解析 Email/需求內文邏輯
+        // 以純文字讀取網頁匯出的 MIME/EML 內文
+        function readAsTextFile(file) {
+            const textReader = new FileReader();
+            textReader.onload = function(e) {
+                let content = e.target.result;
+                if (content) {
+                    // 過濾掉二進位圖檔 Base64 數據，保留可讀文字
+                    content = content.replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/g, '')
+                                     .replace(/iVBORw0KGgo[A-Za-z0-9+/=\s]+/g, '');
+
+                    document.getElementById('emailRawText').value = content;
+                    parseEmailContent();
+                } else {
+                    alert('無法讀取檔案內文。');
+                }
+            };
+            textReader.readAsText(file, 'UTF-8');
+        }
+
+        // 智慧解析 Email 內文核心邏輯
         function parseEmailContent() {
             const text = document.getElementById('emailRawText').value;
             if (!text.trim()) return;
@@ -528,6 +543,7 @@
                 .replace(/(?:0\d{1,2}[-\s]?\d{6,8}(?:\s*(?:分機|ext|\#)\s*\d+)?)|(?:09\d{8})/gi, '')
                 .replace(/(?:電話|E-mail|Email|聯絡人|E-mail:)\s*[:：]?/gi, '')
                 .replace(/^[\s\u4e00-\u9fa5a-zA-Z.]+\n+/g, '')
+                .replace(/SMTP:[^\s]+/gi, '') // 過濾 MIME 標頭
                 .trim();
 
             let fullDescription = positionTitle;
@@ -550,7 +566,7 @@
 
             renderItems();
             toggleEmailParser();
-            alert("已成功解析郵件內容並帶入報價單對應欄位！");
+            alert("已成功匯入郵件內容並自動填入報價單！");
         }
 
         function formatNumber(num) {
@@ -613,7 +629,6 @@
                 `;
                 tbody.appendChild(tr);
 
-                // 自動調整內容高度
                 const textarea = tr.querySelector('textarea');
                 autoResizeTextarea(textarea);
             });
